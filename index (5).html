@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Victor Omodei — Nutrição & Performance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { montserrat: ['Montserrat', 'sans-serif'] },
+          colors: {
+            offwhite:    '#F8F8F6',
+            ice:         '#F1F1EF',
+            frost:       '#E9E9E7',
+            graphite:    '#1E1E2A',
+            graphitemid: '#3A3A4A',
+            royal:       '#1A3A8F',
+            royaldark:   '#122B6E',
+            royallight:  '#2B50B8',
+            royalglow:   '#3B63D4',
+            softgray:    '#D6D6D8',
+            midgray:     '#8A8A90',
+            lightgray:   '#C4C4C8',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { font-family: 'Montserrat', sans-serif; }
+    html { scroll-behavior: smooth; }
+    body { background-color: #F8F8F6; color: #1E1E2A; overflow-x: hidden; }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 0; opacity: 0.35;
+    }
+
+    @keyframes fadeUp   { from { opacity:0; transform:translateY(32px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeIn   { from { opacity:0; } to { opacity:1; } }
+    @keyframes pulse-royal {
+      0%,100% { box-shadow: 0 0 0 0 rgba(26,58,143,0.35); }
+      50%      { box-shadow: 0 0 0 14px rgba(26,58,143,0); }
+    }
+    @keyframes bounce { 0%,100% { transform:translateY(0); } 50% { transform:translateY(6px); } }
+
+    .animate-fadeUp  { animation: fadeUp  0.8s ease forwards; }
+    .animate-fadeIn  { animation: fadeIn  0.8s ease forwards; }
+    .delay-100 { animation-delay:.1s; } .delay-200 { animation-delay:.2s; }
+    .delay-300 { animation-delay:.3s; } .delay-400 { animation-delay:.4s; }
+    .opacity-0-init  { opacity: 0; }
+
+    .reveal { opacity:0; transform:translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible  { opacity:1; transform:translateY(0); }
+
+    /* ── Cards — lift cleanly off off-white ── */
+    .card-soft {
+      background: #FFFFFF; border-radius: 16px;
+      box-shadow: 0 1px 3px rgba(30,30,42,.05), 0 6px 20px rgba(30,30,42,.07), 0 16px 40px rgba(30,30,42,.06);
+      transition: box-shadow .3s ease, transform .3s ease;
+    }
+    .card-soft:hover {
+      box-shadow: 0 2px 6px rgba(30,30,42,.07), 0 12px 32px rgba(30,30,42,.11), 0 24px 56px rgba(30,30,42,.09);
+      transform: translateY(-4px);
+    }
+
+    nav { backdrop-filter: blur(14px); }
+
+    .hero-bg { background: linear-gradient(140deg, #F8F8F6 0%, #F1F1EF 45%, #EAEAF4 100%); }
+
+    .tag-pill {
+      display:inline-block; padding:4px 14px; border-radius:999px;
+      font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+      background:#E6EAF5; color:#1A3A8F;
+    }
+
+    .section-line { height:1px; background:linear-gradient(90deg,transparent,#D6D6D8 30%,#D6D6D8 70%,transparent); }
+
+    .btn-primary {
+      background: linear-gradient(135deg,#1A3A8F 0%,#2B50B8 100%);
+      color:#fff; border-radius:8px; font-weight:700; letter-spacing:.05em;
+      text-transform:uppercase; font-size:13px; padding:16px 36px;
+      transition:all .3s ease; box-shadow:0 4px 20px rgba(26,58,143,.30);
+      animation: pulse-royal 2.5s ease-in-out infinite;
+    }
+    .btn-primary:hover {
+      background:linear-gradient(135deg,#122B6E 0%,#1A3A8F 100%);
+      box-shadow:0 8px 36px rgba(26,58,143,.42); transform:translateY(-2px);
+    }
+
+    .btn-outline {
+      border:2px solid #1A3A8F; color:#1A3A8F; border-radius:8px;
+      font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+      font-size:13px; padding:14px 32px; transition:all .3s ease;
+    }
+    .btn-outline:hover { background:#1A3A8F; color:#fff; transform:translateY(-2px); }
+
+    .impact-card {
+      background:#fff; border-radius:20px; overflow:hidden; position:relative;
+      box-shadow: 0 1px 4px rgba(30,30,42,.05), 0 8px 28px rgba(30,30,42,.08), 0 20px 48px rgba(30,30,42,.06);
+      transition:all .3s ease;
+    }
+    .impact-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:3px;
+      background:linear-gradient(90deg,#1A3A8F,#3B63D4);
+    }
+    .impact-card:hover {
+      transform:translateY(-6px);
+      box-shadow:0 2px 8px rgba(30,30,42,.07),0 16px 48px rgba(30,30,42,.13),0 32px 72px rgba(30,30,42,.09);
+    }
+
+    .testimonial-card {
+      background:#fff; border-radius:18px; position:relative;
+      box-shadow:0 1px 4px rgba(30,30,42,.05),0 6px 24px rgba(30,30,42,.08),0 16px 40px rgba(30,30,42,.06);
+      transition:all .3s ease;
+    }
+    .testimonial-card:hover {
+      box-shadow:0 2px 8px rgba(30,30,42,.07),0 12px 40px rgba(30,30,42,.12),0 28px 60px rgba(30,30,42,.08);
+      transform:translateY(-3px);
+    }
+    .testimonial-card .quote-mark {
+      font-size:72px; line-height:1; color:#E6EAF5; font-family:Georgia,serif;
+      position:absolute; top:12px; left:20px;
+    }
+
+    .method-section-even { background:#FFFFFF; }
+    .method-section-odd  { background:#F1F2F7; }
+
+    .nav-link { position:relative; transition:color .2s; }
+    .nav-link::after { content:''; position:absolute; bottom:-2px; left:0; width:0; height:2px; background:#1A3A8F; transition:width .3s ease; }
+    .nav-link:hover::after { width:100%; }
+    .nav-link:hover { color:#1A3A8F; }
+
+    .floating-badge {
+      position:absolute; background:#fff; border-radius:12px;
+      box-shadow:0 4px 24px rgba(30,30,42,.14); padding:12px 18px;
+      display:flex; align-items:center; gap:10px;
+      animation:fadeUp 1s ease .8s both;
+    }
+
+    .stat-number {
+      font-size:clamp(2.5rem,5vw,4rem); font-weight:900; line-height:1;
+      background:linear-gradient(135deg,#1A3A8F 0%,#3B63D4 100%);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    }
+
+    .photo-victor {
+      width:100%; aspect-ratio:3/4;
+      background:linear-gradient(160deg,#D8DCE8 0%,#C4CBDF 50%,#B0BAD4 100%);
+      border-radius:24px; display:flex; align-items:flex-end; justify-content:center;
+      overflow:hidden; position:relative;
+    }
+    .photo-victor-inner {
+      width:100%; height:100%;
+      background:linear-gradient(160deg,#9AAACB 0%,#7B8FBE 100%);
+      border-radius:20px 20px 0 0; display:flex; align-items:center;
+      justify-content:center; position:relative;
+      overflow: hidden; /* Garante que a foto não saia das bordas */
+      border-radius: 24px; /* Mesma curvatura do card de fora */
+    }
+    .photo-label {
+      position:absolute; bottom:16px; left:50%; transform:translateX(-50%);
+      background:rgba(255,255,255,.88); backdrop-filter:blur(8px); border-radius:8px;
+      padding:6px 14px; font-size:11px; font-weight:600; color:#1A3A8F;
+      white-space:nowrap; letter-spacing:.05em;
+    }
+
+    .step-circle {
+      width:48px; height:48px; border-radius:50%;
+      background:linear-gradient(135deg,#1A3A8F,#3B63D4);
+      display:flex; align-items:center; justify-content:center;
+      color:white; font-weight:800; font-size:18px; flex-shrink:0;
+      box-shadow:0 4px 16px rgba(26,58,143,.30);
+    }
+
+    .process-connector { width:2px; height:40px; background:linear-gradient(#3B63D4,#D6D6D8); margin:0 auto; }
+
+    .section-label { font-size:11px; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:#1A3A8F; }
+
+    .deco-line { width:60px; height:3px; background:linear-gradient(90deg,#1A3A8F,#3B63D4); border-radius:2px; }
+
+    .bar-fill { background:linear-gradient(90deg,#1A3A8F,#3B63D4); }
+
+    @media (max-width:768px) { .floating-badge { display:none; } }
+    .scroll-indicator { animation:bounce 1.8s ease-in-out infinite; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="fixed top-0 left-0 right-0 z-50 border-b border-softgray/50" style="background:rgba(248,248,246,0.92);">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-full flex items-center justify-center" style="background:linear-gradient(135deg,#1A3A8F,#3B63D4);">
+        <span class="text-white font-black text-sm">V</span>
+      </div>
+      <span class="font-bold text-graphite text-lg tracking-tight">Victor Omodei</span>
+    </div>
+    <div class="hidden md:flex items-center gap-8">
+      <a href="#metodo"      class="nav-link text-midgray text-sm">Método</a>
+      <a href="#resultados"  class="nav-link text-midgray text-sm">Resultados</a>
+      <a href="#depoimentos" class="nav-link text-midgray text-sm">Depoimentos</a>
+      <a href="#sobre"       class="nav-link text-midgray text-sm">Sobre</a>
+     
+    </div>
+    <button class="md:hidden text-graphite" onclick="document.getElementById('mm').classList.toggle('hidden')">
+      <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+  </div>
+  <div id="mm" class="hidden md:hidden border-t border-softgray px-6 py-4 flex flex-col gap-4" style="background:#F8F8F6;">
+    <a href="#metodo"      class="text-graphite font-600 text-sm">Método</a>
+    <a href="#resultados"  class="text-graphite font-600 text-sm">Resultados</a>
+    <a href="#depoimentos" class="text-graphite font-600 text-sm">Depoimentos</a>
+    <a href="#sobre"       class="text-graphite font-600 text-sm">Sobre</a>
+    
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero-bg min-h-screen pt-20 pb-16 relative overflow-hidden">
+  <div class="absolute top-20 right-0 w-96 h-96 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(59,99,212,.12) 0%,transparent 70%);transform:translate(40%,-20%);"></div>
+  <div class="absolute bottom-0 left-0 w-72 h-72 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(26,58,143,.08) 0%,transparent 70%);transform:translate(-30%,30%);"></div>
+
+  <div class="max-w-6xl mx-auto px-6 relative z-10">
+    <div class="grid lg:grid-cols-2 gap-16 items-center min-h-[calc(100vh-80px)]">
+
+      <div class="opacity-0-init animate-fadeUp">
+        <div class="flex items-center gap-3 mb-6">
+          <span class="tag-pill">Nutricionista &amp; Treinador</span>
+          <span class="tag-pill" style="background:#EBEBEB;color:#8A8A90;">Desde 2016</span>
+        </div>
+        <h1 class="text-5xl lg:text-6xl xl:text-7xl font-black text-graphite leading-[1.05] tracking-tight mb-6">
+          Seu corpo é<br/>
+          <span style="background:linear-gradient(135deg,#1A3A8F 0%,#2B50B8 55%,#3B63D4 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+            resultado<br/>do método.
+          </span>
+        </h1>
+        <p class="text-midgray text-lg leading-relaxed mb-8 max-w-md">
+          Consultoria integrada de <strong class="text-graphite font-600">nutrição e treinamento</strong> personalizada para quem leva performance a sério — dentro e fora da academia.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 mb-12">
+          <a href="https://wa.me/5511948904723?text=Olá%20Victor%2C%20quero%20conhecer%20a%20consultoria!%20Estou%20pronto(a)%20para%20transformar%20meus%20hábitos%20e%20quero%20entender%20tudo%20sobre%20sua%20consultoria%20pode%20me%20ajudar%20a%20alcançar%20meus%20resultados!" target="_blank" class="btn-primary inline-flex items-center justify-center gap-2">
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Quero minha consultoria
+          </a>
+          <a href="#metodo" class="btn-outline inline-flex items-center justify-center gap-2">
+            Conhecer o método
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+        <div class="flex items-center gap-6 pt-6 border-t border-softgray">
+          <div>
+            <div class="stat-number text-3xl">+3000</div>
+            <div class="text-xs text-midgray mt-0.5">Alunos transformados</div>
+          </div>
+          <div class="w-px h-10 bg-softgray"></div>
+          <div>
+            <div class="stat-number text-3xl">8+</div>
+            <div class="text-xs text-midgray mt-0.5">Anos de experiência</div>
+          </div>
+          <div class="w-px h-10 bg-softgray"></div>
+          <div>
+            <div class="stat-number text-3xl">98%</div>
+            <div class="text-xs text-midgray mt-0.5">Satisfação dos clientes</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative opacity-0-init animate-fadeIn delay-300">
+        <div class="photo-victor mx-auto max-w-sm">
+          <div class="photo-victor-inner">
+           <img 
+          src="img/primeira.png" 
+           alt="Victor Omodei" 
+          class="w-full h-full object-cover rounded-t-[20px]"
+          />
+          </div>
+          
+        </div>
+        <!-- Badge 1 -->
+        <div class="floating-badge" style="top:32px;right:-24px;">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:linear-gradient(135deg,#1A3A8F,#3B63D4);">
+            <svg width="18" height="18" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+          </div>
+          <div>
+            <div class="font-700 text-graphite text-sm">Método Validado</div>
+            <div class="text-xs text-midgray">Baseado em evidências</div>
+          </div>
+        </div>
+        <!-- Badge 2 -->
+        <div class="floating-badge" style="bottom:80px;left:-24px;">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center bg-white border-2" style="border-color:#3B63D4;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A3A8F" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
+          <div>
+            <div class="font-700 text-graphite text-sm">Resultados em</div>
+            <div class="text-xs font-700" style="color:#1A3A8F;">30 dias garantidos</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-indicator absolute bottom-8 left-1/2 -translate-x-1/2 text-center">
+      <div class="text-xs text-lightgray mb-2">Rolar para ver mais</div>
+      <div class="w-6 h-10 border-2 border-lightgray rounded-full mx-auto flex items-start justify-center pt-2">
+        <div class="w-1.5 h-2.5 rounded-full" style="background:#1A3A8F;animation:bounce 1.8s ease-in-out infinite;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BRAND STRIP -->
+<div style="background:#1E1E2A;" class="py-5">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex flex-wrap items-center justify-center gap-8 md:gap-16">
+      <div class="flex items-center gap-2" style="color:rgba(255,255,255,.45);">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <span class="text-sm font-600 tracking-wide">CRN Registrado</span>
+      </div>
+      <div class="flex items-center gap-2" style="color:rgba(255,255,255,.45);">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span class="text-sm font-600 tracking-wide">CREF Certificado</span>
+      </div>
+      <div class="flex items-center gap-2" style="color:rgba(255,255,255,.45);">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        <span class="text-sm font-600 tracking-wide">Pós-graduado em Esporte</span>
+      </div>
+      <div class="flex items-center gap-2" style="color:rgba(255,255,255,.45);">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75M9 7a4 4 0 110 8 4 4 0 010-8z"/></svg>
+        <span class="text-sm font-600 tracking-wide">+500 alunos atendidos</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTADOS — transformation cards only (big stats section removed) -->
+<section id="resultados" class="py-24" style="background:#F8F8F6;">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-16 reveal">
+      <div class="section-label mb-3">Resultados reais</div>
+      <div class="deco-line mx-auto mb-6"></div>
+      <h2 class="text-4xl lg:text-5xl font-black text-graphite leading-tight">
+        Histórias que <span style="color:#1A3A8F;">inspiram</span>
+      </h2>
+      <p class="text-midgray mt-4 max-w-lg mx-auto text-lg">Cada resultado é construído com protocolo individualizado, consistência e acompanhamento real.</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8">
+
+      <div class="impact-card p-8 reveal">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center text-white font-800 text-xl" style="background:linear-gradient(135deg,#1A3A8F,#3B63D4);">M</div>
+          <div>
+            <div class="font-700 text-graphite">Marcos, 32 anos</div>
+            <div class="text-xs text-midgray">Executivo — São Paulo</div>
+          </div>
+        </div>
+        <div class="space-y-3 mb-6">
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span class="text-midgray">Composição corporal</span><span class="font-700" style="color:#1A3A8F;">-14% gordura</span></div>
+            <div class="h-2 rounded-full overflow-hidden" style="background:#E9E9E7;"><div class="h-full rounded-full bar-fill" style="width:86%;"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span class="text-midgray">Massa muscular</span><span class="font-700" style="color:#1A3A8F;">+6kg</span></div>
+            <div class="h-2 rounded-full overflow-hidden" style="background:#E9E9E7;"><div class="h-full rounded-full bar-fill" style="width:70%;"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span class="text-midgray">Energia diária</span><span class="font-700" style="color:#1A3A8F;">+90%</span></div>
+            <div class="h-2 rounded-full overflow-hidden" style="background:#E9E9E7;"><div class="h-full rounded-full bar-fill" style="width:90%;"></div></div>
+          </div>
+        </div>
+        <div class="text-xs text-midgray italic border-t border-softgray pt-4">"Perdi 12kg em 4 meses sem parar de comer o que gostava. O protocolo foi cirúrgico."</div>
+        <div class="text-xs font-600 mt-2" style="color:#1A3A8F;">Duração: 16 semanas</div>
+      </div>
+
+      <div class="impact-card p-8 reveal delay-200">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center text-white font-800 text-xl" style="background:linear-gradient(135deg,#122B6E,#2B50B8);">A</div>
+          <div>
+            <div class="font-700 text-graphite">Ana, 28 anos</div>
+            <div class="text-xs text-midgray">Atleta amadora — Rio de Janeiro</div>
+          </div>
+        </div>
+        <div class="space-y-3 mb-6">
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span class="text-midgray">Performance 5km</span><span class="font-700" style="color:#1A3A8F;">-4min</span></div>
+            <div class="h-2 rounded-full overflow-hidden" style="background:#E9E9E7;"><div class="h-full rounded-full bar-fill" style="width:80%;"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span class="text-midgray">Recuperação</span><span class="font-700" style="color:#1A3A8F;">+75%</span></div>
+            <div class="h-2 rounded-full overflow-hidden" style="background:#E9E9E7;"><div class="h-full rounded-full bar-fill" style="width:75%;"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span class="text-midgray">Qualidade do sono</span><span class="font-700" style="color:#1A3A8F;">+85%</span></div>
+            <div class="h-2 rounded-full overflow-hidden" style="background:#E9E9E7;"><div class="h-full rounded-full bar-fill" style="width:85%;"></div></div>
+          </div>
+        </div>
+        <div class="text-xs text-midgray italic border-t border-softgray pt-4">"Nunca treinei tão bem. A integração entre dieta e treino foi o diferencial que faltava."</div>
+        <div class="text-xs font-600 mt-2" style="color:#1A3A8F;">Duração: 20 semanas</div>
+      </div>
+
+      <div class="impact-card p-8 reveal delay-400">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center text-white font-800 text-xl" style="background:linear-gradient(135deg,#2B50B8,#3B63D4);">R</div>
+          <div>
+            <div class="font-700 text-graphite">Rafael, 45 anos</div>
+            <div class="text-xs text-midgray">Empresário — Belo Horizonte</div>
+          </div>
+        </div>
+        <div class="space-y-3 mb-6">
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span class="text-midgray">Peso total</span><span class="font-700" style="color:#1A3A8F;">-22kg</span></div>
+            <div class="h-2 rounded-full overflow-hidden" style="background:#E9E9E7;"><div class="h-full rounded-full bar-fill" style="width:92%;"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span class="text-midgray">Triglicerídeos</span><span class="font-700" style="color:#1A3A8F;">Normalizado</span></div>
+            <div class="h-2 rounded-full overflow-hidden" style="background:#E9E9E7;"><div class="h-full rounded-full bar-fill" style="width:95%;"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span class="text-midgray">Disposição geral</span><span class="font-700" style="color:#1A3A8F;">+100%</span></div>
+            <div class="h-2 rounded-full overflow-hidden" style="background:#E9E9E7;"><div class="h-full rounded-full bar-fill" style="width:100%;"></div></div>
+          </div>
+        </div>
+        <div class="text-xs text-midgray italic border-t border-softgray pt-4">"Aos 45 anos voltei a ter o corpo dos 30. Sem dieta milagrosa, só com o método do Victor."</div>
+        <div class="text-xs font-600 mt-2" style="color:#1A3A8F;">Duração: 28 semanas</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="section-line"></div>
+
+<!-- MÉTODO — Nutrição -->
+<section id="metodo" class="method-section-odd py-24">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+      
+      <div class="reveal">
+        <div class="relative">
+          <div class="rounded-3xl overflow-hidden shadow-2xl relative" style="height:480px;">
+            <img 
+              src="img/segunda.png" 
+              alt="Victor Omodei - Meeting de Nutrição" 
+              class="w-full h-full object-cover object-top"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+          </div>
+
+          <div class="absolute -bottom-6 -right-6 card-soft p-5 w-52 bg-white shadow-xl rounded-2xl">
+            <div class="text-xs text-midgray mb-1">Plano alimentar</div>
+            <div class="font-800 text-graphite text-lg">100% individual</div>
+            <div class="text-xs font-600 mt-2" style="color:#1A3A8F;">→ Baseado nos seus exames</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal delay-200">
+        <div class="section-label mb-3">Pilar 01</div>
+        <div class="deco-line mb-6"></div>
+        <h2 class="text-4xl lg:text-5xl font-black text-graphite leading-tight mb-6">
+          Nutrição que<br/><span style="color:#1A3A8F;">nutre de verdade.</span>
+        </h2>
+        <p class="text-midgray text-lg leading-relaxed mb-8">
+          Esqueça listas de alimentos genéricas. O protocolo nutricional do Victor é construído com base na sua bioquímica, rotina e objetivo real — não em templates.
+        </p>
+        
+        <div class="space-y-5">
+          <div class="flex items-start gap-4">
+            <div class="step-circle flex-shrink-0 w-10 h-10 text-sm flex items-center justify-center rounded-full bg-[#1A3A8F] text-white font-bold">1</div>
+            <div>
+              <div class="font-700 text-graphite mb-1">Anamnese e exames laboratoriais</div>
+              <div class="text-sm text-midgray">Entendemos sua saúde de dentro para fora antes de prescrever qualquer coisa.</div>
+            </div>
+          </div>
+          
+          <div class="flex items-start gap-4">
+            <div class="step-circle flex-shrink-0 w-10 h-10 text-sm flex items-center justify-center rounded-full bg-[#1A3A8F] text-white font-bold">2</div>
+            <div>
+              <div class="font-700 text-graphite mb-1">Periodização nutricional</div>
+              <div class="text-sm text-midgray">Ajustamos os macros conforme a fase de treino — ganho, cutting ou manutenção.</div>
+            </div>
+          </div>
+          
+          <div class="flex items-start gap-4">
+            <div class="step-circle flex-shrink-0 w-10 h-10 text-sm flex items-center justify-center rounded-full bg-[#1A3A8F] text-white font-bold">3</div>
+            <div>
+              <div class="font-700 text-graphite mb-1">Suporte semanal e ajustes</div>
+              <div class="text-sm text-midgray">Check-ins semanais garantem que o plano evolua com você.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- MÉTODO — Treino -->
+<section class="method-section-even py-24">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+      
+      <div class="reveal order-2 lg:order-1">
+        <div class="section-label mb-3">Pilar 02</div>
+        <div class="deco-line mb-6"></div>
+        <h2 class="text-4xl lg:text-5xl font-black text-graphite leading-tight mb-6">
+          Treino com<br/><span style="color:#1A3A8F;">inteligência.</span>
+        </h2>
+        <p class="text-midgray text-lg leading-relaxed mb-8">
+          Volume, intensidade e recuperação calculados para o seu nível e disponibilidade. Sem achismo, sem exagero, sem estagnação.
+        </p>
+        
+        <div class="grid grid-cols-2 gap-4 mb-8">
+          <div class="card-soft p-5"><div class="text-2xl font-black mb-1" style="color:#1A3A8F;">3–5x</div><div class="text-xs text-midgray">por semana — adaptado à sua agenda</div></div>
+          <div class="card-soft p-5"><div class="text-2xl font-black mb-1" style="color:#1A3A8F;">100%</div><div class="text-xs text-midgray">periodizado e progressivo</div></div>
+          <div class="card-soft p-5"><div class="text-2xl font-black mb-1" style="color:#1A3A8F;">Online</div><div class="text-xs text-midgray">ou presencial — você escolhe</div></div>
+          <div class="card-soft p-5"><div class="text-2xl font-black mb-1" style="color:#1A3A8F;">App</div><div class="text-xs text-midgray">de acompanhamento integrado</div></div>
+        </div>
+        
+        <a href="https://wa.me/5511948904723?text=Olá%20Victor%2C%20quero%20conhecer%20a%20consultoria!%20Estou%20pronto(a)%20para%20transformar%20meus%20hábitos%20e%20quero%20entender%20tudo%20sobre%20sua%20consultoria%20pode%20me%20ajudar%20a%20alcançar%20meus%20resultados!" target="_blank" class="btn-primary inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-[#1A3A8F] text-white font-bold text-lg shadow-lg hover:bg-[#1A3A8F]/90 transition-all">
+          Começar meu treino
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <div class="reveal delay-200 order-1 lg:order-2">
+        <div class="relative">
+          <div class="rounded-3xl overflow-hidden shadow-2xl relative" style="height:480px;">
+            <img 
+              src="img/penultima.png" 
+              alt="Treinamento com Victor Omodei" 
+              class="w-full h-full object-cover object-center"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+          </div>
+
+          <div class="absolute -bottom-6 -left-6 card-soft p-5 w-52 bg-white shadow-xl rounded-2xl">
+            <div class="text-xs text-midgray mb-1">Acompanhamento</div>
+            <div class="font-800 text-graphite text-lg">Em tempo real</div>
+            <div class="text-xs font-600 mt-2" style="color:#1A3A8F;">→ Suporte via WhatsApp</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="section-line"></div>
+
+<!-- PROCESSO -->
+<section class="py-24" style="background:#F8F8F6;">
+  <div class="max-w-4xl mx-auto px-6">
+    <div class="text-center mb-16 reveal">
+      <div class="section-label mb-3">Processo</div>
+      <div class="deco-line mx-auto mb-6"></div>
+      <h2 class="text-4xl lg:text-5xl font-black text-graphite leading-tight">Da inscrição aos <span style="color:#1A3A8F;">resultados</span></h2>
+    </div>
+    <div class="space-y-0">
+      <div class="flex gap-6 items-start reveal">
+        <div class="flex flex-col items-center"><div class="step-circle">1</div><div class="process-connector"></div></div>
+        <div class="card-soft p-6 flex-1">
+          <div class="tag-pill mb-3">Semana 1</div>
+          <h3 class="font-800 text-graphite text-xl mb-2">Avaliação completa</h3>
+          <p class="text-midgray text-sm leading-relaxed">Anamnese detalhada, análise de exames, bioimpedância e definição dos seus objetivos. Entendemos quem você é antes de prescrever qualquer coisa.</p>
+        </div>
+      </div>
+      <div class="flex gap-6 items-start reveal delay-100" style="margin-top:-8px;">
+        <div class="flex flex-col items-center"><div class="step-circle">2</div><div class="process-connector"></div></div>
+        <div class="card-soft p-6 flex-1">
+          <div class="tag-pill mb-3">Semana 2</div>
+          <h3 class="font-800 text-graphite text-xl mb-2">Protocolo entregue</h3>
+          <p class="text-midgray text-sm leading-relaxed">Plano alimentar, suplementação e ficha de treino 100% personalizados. Tudo no app para fácil acesso e controle.</p>
+        </div>
+      </div>
+      <div class="flex gap-6 items-start reveal delay-200" style="margin-top:-8px;">
+        <div class="flex flex-col items-center"><div class="step-circle">3</div><div class="process-connector"></div></div>
+        <div class="card-soft p-6 flex-1">
+          <div class="tag-pill mb-3">Contínuo</div>
+          <h3 class="font-800 text-graphite text-xl mb-2">Acompanhamento semanal</h3>
+          <p class="text-midgray text-sm leading-relaxed">Check-ins semanais, ajustes no plano conforme evolução e resposta ao treino. Você nunca estará sozinho.</p>
+        </div>
+      </div>
+      <div class="flex gap-6 items-start reveal delay-300" style="margin-top:-8px;">
+        <div class="flex flex-col items-center"><div class="step-circle">✓</div></div>
+        <div class="flex-1 p-6 rounded-2xl" style="background:linear-gradient(135deg,#1A3A8F,#2B50B8);box-shadow:0 4px 24px rgba(26,58,143,.30),0 16px 48px rgba(26,58,143,.20);">
+          <div class="text-xs font-700 uppercase tracking-wider mb-3" style="color:rgba(255,255,255,.65);">Resultado</div>
+          <h3 class="font-800 text-white text-xl mb-2">Transformação visível e sustentável</h3>
+          <p class="text-sm leading-relaxed" style="color:rgba(255,255,255,.70);">Resultados que você mantém porque aprendeu o processo — não apenas seguiu uma dieta temporária.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section id="depoimentos" class="py-24" style="background:linear-gradient(160deg,#F1F1EF 0%,#EAEAF4 100%);">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-16 reveal">
+      <div class="section-label mb-3">Depoimentos</div>
+      <div class="deco-line mx-auto mb-6"></div>
+      <h2 class="text-4xl lg:text-5xl font-black text-graphite leading-tight">O que dizem os <span style="color:#1A3A8F;">alunos</span></h2>
+    </div>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="testimonial-card p-8 reveal">
+        <div class="quote-mark">"</div>
+        <div class="pt-10">
+          <p class="text-graphite text-sm leading-relaxed mb-6">O Victor não te vende uma dieta, ele te entrega um estilo de vida. Em 5 meses perdi 16kg sem sentir que estava sacrificando minha vida social.</p>
+          <div class="flex items-center gap-3 border-t border-softgray pt-5">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-800" style="background:linear-gradient(135deg,#1A3A8F,#3B63D4);">L</div>
+            <div><div class="font-700 text-graphite text-sm">Lucas M.</div><div class="text-xs text-midgray">Engenheiro, 34 anos</div></div>
+            <div class="ml-auto text-yellow-400 text-sm">★★★★★</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card p-8 reveal delay-200">
+        <div class="quote-mark">"</div>
+        <div class="pt-10">
+          <p class="text-graphite text-sm leading-relaxed mb-6">Tentei outros nutricionistas e treinadores antes. Nenhum integrou tudo como o Victor faz. É como ter dois profissionais em um, mas com sinergia total.</p>
+          <div class="flex items-center gap-3 border-t border-softgray pt-5">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-800" style="background:linear-gradient(135deg,#122B6E,#2B50B8);">C</div>
+            <div><div class="font-700 text-graphite text-sm">Camila R.</div><div class="text-xs text-midgray">Médica, 29 anos</div></div>
+            <div class="ml-auto text-yellow-400 text-sm">★★★★★</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card p-8 reveal delay-400">
+        <div class="quote-mark">"</div>
+        <div class="pt-10">
+          <p class="text-graphite text-sm leading-relaxed mb-6">Cheguei pesando 98kg com dores nas articulações. Hoje estou em 76kg, sem dores e correndo minha primeira meia maratona. Sem o Victor não teria chegado aqui.</p>
+          <div class="flex items-center gap-3 border-t border-softgray pt-5">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-800" style="background:linear-gradient(135deg,#2B50B8,#3B63D4);">P</div>
+            <div><div class="font-700 text-graphite text-sm">Paulo S.</div><div class="text-xs text-midgray">Professor, 42 anos</div></div>
+            <div class="ml-auto text-yellow-400 text-sm">★★★★★</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section id="sobre" class="py-24" style="background:#F8F8F6;">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+      <div class="reveal">
+        <div class="section-label mb-3">Sobre</div>
+        <div class="deco-line mb-6"></div>
+        <h2 class="text-4xl lg:text-5xl font-black text-graphite leading-tight mb-6">
+          Victor Omodei —<br/><span style="color:#1A3A8F;">sua saúde é<br/>a minha missão.</span>
+        </h2>
+        <p class="text-midgray text-lg leading-relaxed mb-6">Nutricionista e Personal Trainer com mais de 8 anos de atuação clínica e esportiva. Com pós-graduação em Nutrição Esportiva e Fisiologia do Exercício.</p>
+        <p class="text-midgray leading-relaxed mb-8">Já acompanhou mais de 500 alunos, de sedentários a atletas de alta performance. Acredita que o verdadeiro resultado vem da integração inteligente entre o que você come e como você treina.</p>
+        <div class="grid grid-cols-3 gap-4">
+          <div class="text-center card-soft p-4"><div class="font-900 text-2xl" style="color:#1A3A8F;">CRN</div><div class="text-xs text-midgray mt-1">Nutricionista<br/>Registrado</div></div>
+          <div class="text-center card-soft p-4"><div class="font-900 text-2xl" style="color:#1A3A8F;">CREF</div><div class="text-xs text-midgray mt-1">Ed. Física<br/>Certificado</div></div>
+          <div class="text-center card-soft p-4"><div class="font-900 text-2xl" style="color:#1A3A8F;">Pós</div><div class="text-xs text-midgray mt-1">Nutrição<br/>Esportiva</div></div>
+        </div>
+      </div>
+      <div class="reveal delay-200">
+        <div class="photo-victor mx-auto max-w-sm" style="background:linear-gradient(160deg,#C8D0E8 0%,#B0BCDC 50%,#98AACC 100%);">
+          <div class="photo-victor-inner">
+  <img 
+    src="img/ultima.png" 
+    alt="Victor Omodei" 
+    class="w-full h-full object-cover rounded-t-[20px]"
+  />
+</div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="py-28 relative overflow-hidden" style="background:linear-gradient(135deg,#1E1E2A 0%,#1A3A8F 60%,#122B6E 100%);">
+  <div class="absolute top-0 right-0 w-96 h-96 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(59,99,212,.25) 0%,transparent 70%);transform:translate(30%,-30%);"></div>
+  <div class="max-w-4xl mx-auto px-6 text-center reveal relative z-10">
+    <div class="inline-block tag-pill mb-6" style="background:rgba(59,99,212,.25);color:#9BB4EE;">🎯 Vagas limitadas por mês</div>
+    <h2 class="text-4xl lg:text-6xl font-black text-white leading-tight mb-6">
+      Pronto para a sua<br/>
+      <span style="background:linear-gradient(135deg,#7B9FE8,#B8CCFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">melhor versão?</span>
+    </h2>
+    <p class="text-xl leading-relaxed mb-10 max-w-2xl mx-auto" style="color:rgba(255,255,255,.65);">Consultoria individual de nutrição e treino com acompanhamento real, protocolo exclusivo e resultados que duram.</p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+      <a href="https://wa.me/5511948904723?text=Olá%20Victor%2C%20quero%20conhecer%20a%20consultoria!%20Estou%20pronto(a)%20para%20transformar%20meus%20hábitos%20e%20quero%20entender%20tudo%20sobre%20sua%20consultoria%20pode%20me%20ajudar%20a%20alcançar%20meus%20resultados!" target="_blank"
+         class="inline-flex items-center justify-center gap-3 px-10 py-5 rounded-xl font-800 text-sm uppercase tracking-widest text-white transition-all duration-300"
+         style="background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.30);backdrop-filter:blur(8px);"
+         onmouseover="this.style.background='rgba(255,255,255,.22)';this.style.transform='translateY(-3px)'"
+         onmouseout="this.style.background='rgba(255,255,255,.15)';this.style.transform='translateY(0)'">
+        <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Falar com Victor agora
+      </a>
+    </div>
+    <div class="flex flex-wrap justify-center gap-8 text-xs" style="color:rgba(255,255,255,.45);">
+      <div class="flex items-center gap-2"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" style="color:rgba(155,180,238,.8);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Sem contrato de fidelidade</div>
+      <div class="flex items-center gap-2"><svg width="16" height="16" fill="none" stroke="rgba(155,180,238,.8)" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Primeiro resultado em 30 dias</div>
+      <div class="flex items-center gap-2"><svg width="16" height="16" fill="none" stroke="rgba(155,180,238,.8)" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> Resposta em até 24h</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="py-10 border-t border-softgray" style="background:#F1F1EF;">
+  <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+    
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-full flex items-center justify-center" style="background:linear-gradient(135deg,#1A3A8F,#3B63D4);">
+        <span class="text-white font-black text-sm">V</span>
+      </div>
+      <div>
+        <div class="font-800 text-graphite text-sm">Victor Omodei</div>
+        <div class="text-xs text-midgray">Nutricionista &amp; Personal Trainer</div>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-6">
+      <a href="https://www.instagram.com/victor.omodei/" class="text-midgray text-xs transition-colors hover:text-royal">Instagram</a>
+      <a href="https://wa.me/5511948904723?text=Olá%20Victor%2C%20quero%20conhecer%20a%20consultoria!%20Estou%20pronto(a)%20para%20transformar%20meus%20hábitos%20e%20quero%20entender%20tudo%20sobre%20sua%20consultoria%20pode%20me%20ajudar%20a%20alcançar%20meus%20resultados!" target="_blank" class="text-midgray text-xs transition-colors hover:text-royal">WhatsApp</a>
+    </div>
+
+    <div class="text-right">
+      <div class="text-[10px] text-lightgray uppercase tracking-widest mb-1">© 2026 Victor Omodei.</div>
+      <div class="text-xs text-midgray">
+        Desenvolvido por 
+        <a href="https://kadosh-tech.vercel.app/" target="_blank" class="font-bold hover:text-royal transition-colors" style="color:#1A3A8F;">
+          Kadosh Tech
+        </a>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const d = e.target.classList.contains('delay-100') ? 100
+              : e.target.classList.contains('delay-200') ? 200
+              : e.target.classList.contains('delay-300') ? 300
+              : e.target.classList.contains('delay-400') ? 400 : 0;
+      setTimeout(() => e.target.classList.add('visible'), d);
+      obs.unobserve(e.target);
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => obs.observe(el));
+
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    nav.style.boxShadow = window.scrollY > 40 ? '0 2px 24px rgba(30,30,42,.09)' : 'none';
+  });
+</script>
+</body>
+</html>
